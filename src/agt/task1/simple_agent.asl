@@ -2,6 +2,8 @@
 
 /* Initial rules */
 /* Task 1.2.3 Start of your solution */
+even(X) :- X mod 2 = 0.
+odd(X) :- X mod 2 = 1.
 /* Task 1.2.3 End of your solution */
 
 /* Initial goals */
@@ -35,7 +37,7 @@
     : true
     <-
         .print("Implement Task 1.2.1");
-    .
+        Sum = X + Y.
 /* Task 1.2.1 End of your solution */
 
 @start_division_task_1_2_2_plan
@@ -47,6 +49,17 @@
     .
 
 /* Task 1.2.2 Start of your solution */
+@compute_division_impossible_task_1_2_2_plan
++!compute_division(Dividend,Divisor,Quotient)
+    :   Divisor = 0
+    <-
+        Quotient = "Division is not possible".
+
+@compute_division_task_1_2_2_plan
++!compute_division(Dividend,Divisor,Quotient)
+    : true
+    <-
+        Quotient = Dividend / Divisor.
 /* Task 1.2.2 End of your solution */
 
 /* 
@@ -109,14 +122,26 @@
 */
 @start_list_generation_1_2_4_plan
 +!start_list_generation(Start, End)
-    :   true
+    : Start <= End
     <-
         !compute_list(Start, End, [], List);
         .print("List with integers from ", Start, " to ", End, ": ", List);
     .
 
 /* Task 1.2.4 Start of your solution */
-// You are allowed to use a triggering event other than the one provided 
+// You are allowed to use a triggering event other than the one provided
+@compute_list_impossible_plan
++!start_list_generation(Start, End) : true <-
+    .print("Cannot generate list when Start value is larger than End value").
+
+@compute_list_plan
++!compute_list(Start, End, TempList, List) : Start <= End <-
+    !compute_list(Start, End-1, [End | TempList], List).
+
+@all_elements_added_plan
++!compute_list(Start, End, TempList, List) : true <-
+    List = TempList;
+    .print("Generated list successfully").
 /* Task 1.2.4 End of your solution */
 
 /* 
